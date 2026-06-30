@@ -3,253 +3,308 @@
  <head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260630-03-6946cf4"}');</script><script src="/_sdk/e4192b04afde3ce7.telemetry_sdk.js" integrity="sha512-4eZpyKBd3YJnsIPrIpaBqo7QT5UZ6+KSFXkSu1IQiB7jKM8y67ChRhZ5Yh6JfuOJCbPdISiNcS6nLKZzIMG1uQ=="></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ôn Tập Tiếng Trung</title>
+  <title>Ôn Tập Tiếng Trung - Sinh Động</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <style>
-    * { font-family: 'DM Sans', sans-serif; }
-    :root { --accent: #4db6ac; --accent-dark: #00897b; }
-    .fade-in { animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    * { font-family: 'Quicksand', sans-serif; }
+    :root { --accent: #f472b6; --accent-dark: #db2777; --accent-glow: #f9a8d4; }
+    body { background: #fdf2f8; }
+    .fade-in { animation: fadeIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(30px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
+    .float { animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+    .pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 5px var(--accent-glow); } 50% { box-shadow: 0 0 25px var(--accent); } }
     .flip-card { perspective: 1000px; cursor: pointer; }
-    .flip-inner { transition: transform 0.6s; transform-style: preserve-3d; position: relative; width:100%; height:100%; }
+    .flip-inner { transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2); transform-style: preserve-3d; position: relative; width:100%; height:100%; }
     .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
-    .flip-front, .flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; }
-    .flip-back { transform: rotateY(180deg); }
+    .flip-front, .flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; }
+    .flip-back { transform: rotateY(180deg); background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
     .section { display:none; }
-    .section.active { display:block; }
-    .progress-bar { transition: width 0.5s ease; }
-    .btn-primary { background: var(--accent); color:white; border-radius:12px; padding:12px 24px; font-weight:600; transition:all 0.2s; }
-    .btn-primary:hover { background: var(--accent-dark); transform:scale(1.02); }
-    .btn-primary:active { transform:scale(0.98); }
-    .card { background:white; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.06); padding:1.5rem; }
-    .option-btn { border:2px solid #e0e0e0; border-radius:12px; padding:12px 16px; transition:all 0.2s; cursor:pointer; text-align:left; width:100%; }
-    .option-btn:hover { border-color:var(--accent); background:#f0faf9; }
-    .option-btn.correct { border-color:#4caf50; background:#e8f5e9; }
-    .option-btn.wrong { border-color:#ef5350; background:#ffebee; }
-    .drag-item { background:#d0e8f2; border-radius:10px; padding:10px 16px; cursor:grab; user-select:none; transition:all 0.2s; font-weight:500; }
-    .drag-item:active { cursor:grabbing; transform:scale(1.05); }
-    .drag-item.selected { background:var(--accent); color:white; }
-    .drag-item.matched { background:#c8e6c9; opacity:0.7; pointer-events:none; }
-    .writing-canvas { border:2px solid #e0e0e0; border-radius:12px; touch-action:none; background: repeating-linear-gradient(0deg, transparent, transparent 49%, #eee 49%, #eee 51%, transparent 51%, transparent 100%), repeating-linear-gradient(90deg, transparent, transparent 49%, #eee 49%, #eee 51%, transparent 51%, transparent 100%); background-size: 50% 50%; }
-    .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); padding:12px 24px; border-radius:12px; font-weight:600; z-index:9999; animation:slideDown 0.3s ease; }
-    @keyframes slideDown { from{opacity:0;transform:translate(-50%,-20px)} to{opacity:1;transform:translate(-50%,0)} }
+    .section.active { display:block; animation: fadeIn 0.5s ease; }
+    .progress-bar { transition: width 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2); background: linear-gradient(90deg, #f472b6, #8b5cf6); }
+    .btn-primary { background: linear-gradient(135deg, #f472b6, #ec4899); color:white; border-radius:50px; padding:12px 28px; font-weight:600; transition:all 0.3s; box-shadow:0 4px 15px rgba(236,72,153,0.3); border: none; }
+    .btn-primary:hover { transform:scale(1.05) translateY(-3px); box-shadow:0 8px 25px rgba(236,72,153,0.4); }
+    .btn-primary:active { transform:scale(0.95); }
+    .card { background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); border-radius:24px; box-shadow:0 8px 32px rgba(244,114,182,0.12); padding:1.5rem; border:1px solid rgba(255,255,255,0.6); }
+    .option-btn { border:2px solid #fbcfe8; border-radius:16px; padding:12px 18px; transition:all 0.2s; cursor:pointer; text-align:left; width:100%; background:white; }
+    .option-btn:hover { border-color:#f472b6; background:#fdf2f8; transform:scale(1.02); }
+    .option-btn.correct { border-color:#22c55e; background:#dcfce7; box-shadow:0 0 20px rgba(34,197,94,0.2); }
+    .option-btn.wrong { border-color:#ef4444; background:#fee2e2; }
+    .drag-item { background:linear-gradient(135deg, #fbcfe8, #f9a8d4); border-radius:16px; padding:10px 18px; cursor:grab; user-select:none; transition:all 0.3s; font-weight:600; color:#831843; box-shadow:0 2px 8px rgba(244,114,182,0.15); }
+    .drag-item:active { cursor:grabbing; transform:scale(1.08) rotate(-2deg); }
+    .drag-item.selected { background:linear-gradient(135deg, #a78bfa, #8b5cf6); color:white; box-shadow:0 0 20px rgba(139,92,246,0.4); }
+    .drag-item.matched { background:#dcfce7; color:#166534; opacity:0.8; pointer-events:none; border:2px solid #22c55e; }
+    .writing-canvas { border:3px solid #fbcfe8; border-radius:20px; touch-action:none; background: repeating-linear-gradient(0deg, transparent, transparent 49%, #fdf2f8 49%, #fdf2f8 51%, transparent 51%, transparent 100%), repeating-linear-gradient(90deg, transparent, transparent 49%, #fdf2f8 49%, #fdf2f8 51%, transparent 51%, transparent 100%); background-size: 40px 40px; box-shadow:0 4px 20px rgba(244,114,182,0.1); }
+    .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); padding:12px 28px; border-radius:50px; font-weight:600; z-index:9999; animation:slideDown 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2); backdrop-filter:blur(10px); }
+    @keyframes slideDown { from{opacity:0;transform:translate(-50%,-30px) scale(0.9)} to{opacity:1;transform:translate(-50%,0) scale(1)} }
+    .bg-blob { position:fixed; border-radius:50%; filter:blur(80px); opacity:0.3; z-index:-1; pointer-events:none; }
+    .bg-blob-1 { width:400px; height:400px; background:#f472b6; top:-100px; right:-100px; }
+    .bg-blob-2 { width:300px; height:300px; background:#a78bfa; bottom:0; left:-50px; }
+    .bg-blob-3 { width:250px; height:250px; background:#60a5fa; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .glow-text { text-shadow:0 0 30px rgba(244,114,182,0.3); }
   </style>
   <script src="/_sdk/5d8c692e132d2125.resizing_sdk.js" type="text/javascript" integrity="sha512-/Du3Fqe12kKsCd3BrbaNQEPtMxQi9S5hbJhnTf09AAilpqYsGa4N0rnimSX1Ui4dwNElKlen6VlI+E1n/NEfrA=="></script>
  </head>
- <body data-template-id="__page-root" class="min-h-screen">
-  <div class="fixed top-0 left-0 w-full h-2 bg-gray-200 z-50">
-   <div id="global-progress" class="progress-bar h-full bg-gradient-to-r from-teal-400 to-green-400" style="width:0%"></div>
+ <body data-template-id="__page-root" class="min-h-screen relative overflow-x-hidden">
+  <!-- Blobs -->
+  <div class="bg-blob bg-blob-1"></div>
+  <div class="bg-blob bg-blob-2"></div>
+  <div class="bg-blob bg-blob-3"></div>
+
+  <div class="fixed top-0 left-0 w-full h-2.5 bg-gray-200/50 backdrop-blur-sm z-50">
+   <div id="global-progress" class="progress-bar h-full rounded-r-full" style="width:0%"></div>
   </div>
-  <div id="nav-bar" class="fixed top-2 left-0 w-full px-4 py-2 flex items-center justify-between bg-white bg-opacity-90 backdrop-blur-sm z-40 shadow-sm" style="display:none;"><span id="nav-title" class="flex-1 text-center text-sm font-bold text-teal-700"></span> <button class="btn-primary px-3 py-1 text-sm" onclick="goToMenu()">📋 Menu</button>
-  </div><!-- SECTION 0: Welcome -->
+  <div id="nav-bar" class="fixed top-3 left-1/2 -translate-x-1/2 px-6 py-3 flex items-center justify-between bg-white/70 backdrop-blur-xl z-40 rounded-full shadow-lg border border-white/50 w-[92%] max-w-2xl" style="display:none;">
+    <span id="nav-title" class="flex-1 text-center text-sm font-bold text-pink-600"></span>
+    <button class="btn-primary px-4 py-1.5 text-xs" onclick="goToMenu()">📋 Menu</button>
+  </div>
+
+  <!-- SECTION 0: Welcome -->
   <section id="sec-0" class="section active fade-in">
-   <div class="w-full" style="min-height: calc(100 * min(var(--vh, 1vh), 1vh)); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center;">
-    <div class="mb-6">
-     <img data-template-id="hero-image" class="canva-image w-48 h-48 object-cover rounded-full shadow-lg mx-auto" loading="lazy">
+   <div class="min-h-screen flex flex-col items-center justify-center p-6 text-center relative">
+    <div class="float mb-6">
+     <div class="w-44 h-44 rounded-full bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center shadow-2xl pulse-glow">
+      <span class="text-7xl">🇨🇳</span>
+     </div>
     </div>
-    <h1 data-template-id="welcome-title" class="canva-text text-3xl font-bold mb-2"></h1>
-    <p data-template-id="welcome-subtitle" class="canva-text text-lg mb-8 opacity-80"></p><button class="btn-primary text-lg flex items-center gap-2" onclick="startApp()"><span data-template-id="start-btn" class="canva-text"></span> ▶️</button>
+    <h1 class="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent glow-text">Chào Mừng Bạn!</h1>
+    <p class="text-lg text-gray-600 mb-8 max-w-md">Ôn tập tiếng Trung thật vui và hiệu quả với các bài học tương tác 🎯</p>
+    <button class="btn-primary text-lg flex items-center gap-3 px-8 py-4" onclick="startApp()">
+      <span>Bắt đầu thôi!</span>
+      <i data-lucide="sparkles" class="w-5 h-5"></i>
+    </button>
    </div>
-  </section><!-- SECTION 1: Flashcards -->
+  </section>
+
+  <!-- SECTION 1: Flashcards -->
   <section id="sec-1" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec1-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">📚 Từ Vựng</h2>
+    <p class="text-center text-gray-500 mb-6">Lật thẻ và nghe phát âm</p>
     <div class="flex justify-center mb-4">
-     <span id="fc-counter" class="text-sm font-medium text-gray-500">1/19</span>
+     <span id="fc-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full">1/19</span>
     </div>
     <div id="flashcard" class="flip-card mx-auto" style="width:300px;height:380px;" onclick="flipCard()">
      <div class="flip-inner">
-      <div class="flip-front card bg-gradient-to-br from-blue-50 to-teal-50"><span id="fc-hanzi" class="text-6xl font-bold mb-4"></span><span class="text-sm text-gray-400">Nhấn để lật</span>
+      <div class="flip-front card bg-gradient-to-br from-pink-50 to-purple-50 border-2 border-pink-200"><span id="fc-hanzi" class="text-7xl font-bold mb-4 text-pink-700"></span><span class="text-sm text-gray-400">👆 Nhấn để lật</span>
       </div>
-      <div class="flip-back card bg-gradient-to-br from-yellow-50 to-green-50"><span id="fc-pinyin" class="text-xl text-teal-600 mb-2"></span><span id="fc-meaning" class="text-lg font-semibold mb-2"></span><span id="fc-example" class="text-sm text-gray-600 italic mb-4"></span><button class="btn-primary text-sm" onclick="event.stopPropagation();playPronunciation()">🔊 Nghe</button>
+      <div class="flip-back card bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-orange-200"><span id="fc-pinyin" class="text-xl text-pink-600 font-semibold mb-1"></span><span id="fc-meaning" class="text-lg font-bold mb-2 text-gray-700"></span><span id="fc-example" class="text-sm text-gray-600 italic mb-4"></span><button class="btn-primary text-sm px-6" onclick="event.stopPropagation();playPronunciation()">🔊 Nghe</button>
       </div>
      </div>
     </div>
-    <div class="flex justify-between mt-6"><button class="btn-primary px-4 py-2 text-sm" onclick="prevCard()">← Trước</button> <button class="btn-primary px-4 py-2 text-sm" onclick="nextCard()">Tiếp →</button>
+    <div class="flex justify-between mt-6 gap-4"><button class="btn-primary px-5 py-2 text-sm" onclick="prevCard()">← Trước</button> <button class="btn-primary px-5 py-2 text-sm" onclick="nextCard()">Tiếp →</button>
     </div>
     <div class="text-center mt-6">
-     <button class="btn-primary" onclick="goToSection(2)">Hoàn thành → Phần 2</button>
+     <button class="btn-primary" onclick="goToSection(2)">✨ Hoàn thành → Phần 2</button>
     </div>
    </div>
-  </section><!-- SECTION 2: Matching -->
+  </section>
+
+  <!-- SECTION 2: Matching -->
   <section id="sec-2" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec2-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
-    <p data-template-id="sec2-desc" class="canva-text text-center text-gray-500 mb-6"></p>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">🎯 Ghép Từ</h2>
+    <p class="text-center text-gray-500 mb-6">Nối tiếng Hán với nghĩa tiếng Việt</p>
     <div id="matching-game" class="space-y-3"></div>
-    <div id="matching-feedback" class="text-center mt-4 font-bold text-lg"></div>
+    <div id="matching-feedback" class="text-center mt-4 font-bold text-lg text-pink-600"></div>
     <div class="text-center mt-6">
-     <button class="btn-primary" onclick="goToSection(3)">Tiếp → Phần 3</button>
+     <button class="btn-primary" onclick="goToSection(3)">✨ Tiếp → Phần 3</button>
     </div>
    </div>
-  </section><!-- SECTION 3: MCQ -->
+  </section>
+
+  <!-- SECTION 3: MCQ -->
   <section id="sec-3" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec3-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">✅ Chọn Đáp Án</h2>
+    <p class="text-center text-gray-500 mb-6">Chọn đáp án đúng cho mỗi câu</p>
     <div class="card mb-4">
-     <p id="mcq-question" class="text-lg font-medium mb-4"></p>
+     <p id="mcq-question" class="text-lg font-medium mb-4 text-gray-700"></p>
      <div id="mcq-options" class="space-y-3"></div>
-     <p id="mcq-explain" class="mt-4 text-sm text-gray-600 hidden"></p>
+     <p id="mcq-explain" class="mt-4 text-sm text-pink-600 font-medium hidden"></p>
     </div>
-    <div class="flex justify-between items-center"><span id="mcq-counter" class="text-sm text-gray-500"></span> <button id="mcq-next" class="btn-primary text-sm hidden" onclick="nextMCQ()">Câu tiếp →</button>
+    <div class="flex justify-between items-center"><span id="mcq-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full"></span> <button id="mcq-next" class="btn-primary text-sm hidden" onclick="nextMCQ()">Tiếp →</button>
     </div>
     <div id="mcq-complete" class="text-center mt-6 hidden">
-     <p class="text-lg font-bold mb-2">🎉 Hoàn thành!</p>
-     <p id="mcq-score" class="mb-4"></p><button class="btn-primary" onclick="goToSection(4)">Tiếp → Phần 4</button>
+     <p class="text-lg font-bold mb-2 text-purple-600">🎉 Hoàn thành!</p>
+     <p id="mcq-score" class="mb-4 text-pink-600 font-bold"></p><button class="btn-primary" onclick="goToSection(4)">✨ Tiếp → Phần 4</button>
     </div>
    </div>
-  </section><!-- SECTION 4: Sentence Order -->
+  </section>
+
+  <!-- SECTION 4: Sentence Order -->
   <section id="sec-4" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec4-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">🔤 Sắp Xếp Từ</h2>
+    <p class="text-center text-gray-500 mb-6">Sắp xếp thành câu hoàn chỉnh</p>
     <div class="card mb-4">
-     <p class="text-sm text-gray-500 mb-2">Sắp xếp từ thành câu đúng:</p>
-     <div id="order-selected" class="min-h-[50px] flex flex-wrap gap-2 p-3 border-2 border-dashed border-gray-300 rounded-xl mb-4"></div>
-     <div id="order-words" class="flex flex-wrap gap-2"></div>
-     <div id="order-feedback" class="mt-4 font-bold"></div>
+     <p class="text-sm text-gray-500 mb-2">👆 Nhấn vào từ để chọn, nhấn lại để bỏ:</p>
+     <div id="order-selected" class="min-h-[60px] flex flex-wrap gap-2 p-3 border-2 border-dashed border-pink-300 rounded-xl mb-4 bg-pink-50/30"></div>
+     <div id="order-words" class="flex flex-wrap gap-2 justify-center"></div>
+     <div id="order-feedback" class="mt-4 font-bold text-center"></div>
     </div>
-    <div class="flex justify-between items-center"><span id="order-counter" class="text-sm text-gray-500"></span> <button id="order-check" class="btn-primary text-sm" onclick="checkOrder()">Kiểm tra</button> <button id="order-next" class="btn-primary text-sm hidden" onclick="nextOrder()">Tiếp →</button>
+    <div class="flex flex-wrap justify-between items-center gap-2"><span id="order-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full"></span> <button id="order-check" class="btn-primary text-sm" onclick="checkOrder()">✅ Kiểm tra</button> <button id="order-next" class="btn-primary text-sm hidden" onclick="nextOrder()">Tiếp →</button>
     </div>
     <div id="order-complete" class="text-center mt-6 hidden">
-     <p id="order-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(5)">Tiếp → Phần 5</button>
+     <p id="order-score" class="text-lg font-bold text-purple-600"></p><button class="btn-primary" onclick="goToSection(5)">✨ Tiếp → Phần 5</button>
     </div>
    </div>
-  </section><!-- SECTION 5: Modal Verbs -->
+  </section>
+
+  <!-- SECTION 5: Modal Verbs -->
   <section id="sec-5" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec5-title" class="canva-text text-2xl font-bold text-center mb-4"></h2>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">💪 Động Từ</h2>
+    <p class="text-center text-gray-500 mb-6">Chọn động từ tình thái đúng</p>
     <div class="card mb-6 text-sm">
      <div class="grid grid-cols-3 gap-2 text-center font-medium">
-      <div class="p-2 bg-blue-50 rounded-lg">
-       会<br><span class="text-xs text-gray-500">biết (kỹ năng)</span>
-      </div>
-      <div class="p-2 bg-green-50 rounded-lg">
-       能<br><span class="text-xs text-gray-500">có thể</span>
-      </div>
-      <div class="p-2 bg-yellow-50 rounded-lg">
-       可以<br><span class="text-xs text-gray-500">được phép</span>
-      </div>
-      <div class="p-2 bg-pink-50 rounded-lg">
-       应该<br><span class="text-xs text-gray-500">nên</span>
-      </div>
-      <div class="p-2 bg-purple-50 rounded-lg">
-       想<br><span class="text-xs text-gray-500">muốn</span>
-      </div>
-      <div class="p-2 bg-orange-50 rounded-lg">
-       要<br><span class="text-xs text-gray-500">cần/muốn</span>
-      </div>
+      <div class="p-2 bg-pink-100 rounded-xl text-pink-700">会<br><span class="text-xs text-pink-500">biết (kỹ năng)</span></div>
+      <div class="p-2 bg-purple-100 rounded-xl text-purple-700">能<br><span class="text-xs text-purple-500">có thể</span></div>
+      <div class="p-2 bg-blue-100 rounded-xl text-blue-700">可以<br><span class="text-xs text-blue-500">được phép</span></div>
+      <div class="p-2 bg-green-100 rounded-xl text-green-700">应该<br><span class="text-xs text-green-500">nên</span></div>
+      <div class="p-2 bg-yellow-100 rounded-xl text-yellow-700">想<br><span class="text-xs text-yellow-500">muốn</span></div>
+      <div class="p-2 bg-orange-100 rounded-xl text-orange-700">要<br><span class="text-xs text-orange-500">cần/muốn</span></div>
      </div>
     </div>
     <div class="card mb-4">
-     <p id="modal-question" class="text-lg font-medium mb-4"></p>
+     <p id="modal-question" class="text-lg font-medium mb-4 text-gray-700"></p>
      <div id="modal-options" class="space-y-3"></div>
-     <p id="modal-explain" class="mt-4 text-sm text-gray-600 hidden"></p>
+     <p id="modal-explain" class="mt-4 text-sm text-pink-600 font-medium hidden"></p>
     </div>
-    <div class="flex justify-between items-center"><span id="modal-counter" class="text-sm text-gray-500"></span> <button id="modal-next" class="btn-primary text-sm hidden" onclick="nextModal()">Tiếp →</button>
+    <div class="flex justify-between items-center"><span id="modal-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full"></span> <button id="modal-next" class="btn-primary text-sm hidden" onclick="nextModal()">Tiếp →</button>
     </div>
     <div id="modal-complete" class="text-center mt-6 hidden">
-     <p id="modal-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(6)">Tiếp → Phần 6</button>
+     <p id="modal-score" class="text-lg font-bold text-purple-600"></p><button class="btn-primary" onclick="goToSection(6)">✨ Tiếp → Phần 6</button>
     </div>
    </div>
-  </section><!-- SECTION 6: Affirmative-Negative -->
+  </section>
+
+  <!-- SECTION 6: Affirmative-Negative -->
   <section id="sec-6" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec6-title" class="canva-text text-2xl font-bold text-center mb-4"></h2>
-    <p data-template-id="sec6-desc" class="canva-text text-center text-gray-500 mb-6"></p>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">🔄 Câu Chính Phản</h2>
+    <p class="text-center text-gray-500 mb-6">Chuyển câu hỏi sang dạng chính phản</p>
     <div class="card mb-4">
-     <p class="text-sm text-gray-500 mb-1">Chuyển thành câu chính phản:</p>
-     <p id="affirm-question" class="text-xl font-bold mb-4 text-center"></p><input id="affirm-input" type="text" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-400 focus:outline-none text-lg text-center" placeholder="Nhập câu chính phản...">
+     <p class="text-sm text-gray-500 mb-1">👉 Viết lại thành câu chính phản:</p>
+     <p id="affirm-question" class="text-xl font-bold mb-4 text-center text-pink-700"></p><input id="affirm-input" type="text" class="w-full px-5 py-3 rounded-2xl border-2 border-pink-200 focus:border-pink-400 focus:outline-none text-lg text-center bg-white/70" placeholder="Nhập câu chính phản...">
      <div id="affirm-feedback" class="mt-4 font-bold text-center"></div>
     </div>
-    <div class="flex justify-between items-center"><span id="affirm-counter" class="text-sm text-gray-500"></span> <button id="affirm-check" class="btn-primary text-sm" onclick="checkAffirm()">Kiểm tra</button> <button id="affirm-next" class="btn-primary text-sm hidden" onclick="nextAffirm()">Tiếp →</button>
+    <div class="flex flex-wrap justify-between items-center gap-2"><span id="affirm-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full"></span> <button id="affirm-check" class="btn-primary text-sm" onclick="checkAffirm()">✅ Kiểm tra</button> <button id="affirm-next" class="btn-primary text-sm hidden" onclick="nextAffirm()">Tiếp →</button>
     </div>
     <div id="affirm-complete" class="text-center mt-6 hidden">
-     <p id="affirm-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(7)">Tiếp → Phần 7</button>
+     <p id="affirm-score" class="text-lg font-bold text-purple-600"></p><button class="btn-primary" onclick="goToSection(7)">✨ Tiếp → Phần 7</button>
     </div>
    </div>
-  </section><!-- SECTION 7: Dialogue -->
+  </section>
+
+  <!-- SECTION 7: Dialogue -->
   <section id="sec-7" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec7-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">💬 Hội Thoại</h2>
+    <p class="text-center text-gray-500 mb-6">Điền từ còn thiếu vào hội thoại</p>
     <div id="dialogue-area" class="space-y-3 mb-4"></div>
     <div id="dialogue-options" class="card"></div>
-    <div id="dialogue-complete" class="text-center mt-6 hidden"><button class="btn-primary mr-2" onclick="playDialogue()">🔊 Nghe hội thoại</button> <button class="btn-primary" onclick="goToSection(8)">Tiếp → Phần 8</button>
+    <div id="dialogue-complete" class="text-center mt-6 hidden"><button class="btn-primary mr-2" onclick="playDialogue()">🔊 Nghe hội thoại</button> <button class="btn-primary" onclick="goToSection(8)">✨ Tiếp → Phần 8</button>
     </div>
    </div>
-  </section><!-- SECTION 8: Listening -->
+  </section>
+
+  <!-- SECTION 8: Listening -->
   <section id="sec-8" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec8-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">🎧 Luyện Nghe</h2>
+    <p class="text-center text-gray-500 mb-6">Nghe và chọn câu trả lời đúng</p>
     <div class="card mb-4">
      <div class="text-center mb-4">
-      <button class="btn-primary text-lg" onclick="playListenAudio()">🔊 Nghe</button>
+      <button class="btn-primary text-lg px-8" onclick="playListenAudio()">🔊 Nghe</button>
      </div>
-     <p id="listen-question" class="text-lg font-medium mb-4"></p>
+     <p id="listen-question" class="text-lg font-medium mb-4 text-gray-700"></p>
      <div id="listen-options" class="space-y-3"></div>
     </div>
-    <div class="flex justify-between items-center"><span id="listen-counter" class="text-sm text-gray-500"></span> <button id="listen-next" class="btn-primary text-sm hidden" onclick="nextListen()">Tiếp →</button>
+    <div class="flex justify-between items-center"><span id="listen-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full"></span> <button id="listen-next" class="btn-primary text-sm hidden" onclick="nextListen()">Tiếp →</button>
     </div>
     <div id="listen-complete" class="text-center mt-6 hidden">
-     <p id="listen-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(9)">Tiếp → Phần 9</button>
+     <p id="listen-score" class="text-lg font-bold text-purple-600"></p><button class="btn-primary" onclick="goToSection(9)">✨ Tiếp → Phần 9</button>
     </div>
    </div>
-  </section><!-- SECTION 9: Writing -->
+  </section>
+
+  <!-- SECTION 9: Writing -->
   <section id="sec-9" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec9-title" class="canva-text text-2xl font-bold text-center mb-4"></h2>
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">✍️ Viết Chữ</h2>
+    <p class="text-center text-gray-500 mb-6">Tập viết chữ Hán trên bảng</p>
     <div class="card mb-4 text-center">
-     <p class="text-sm text-gray-500 mb-2">Viết chữ này:</p>
-     <p id="write-char" class="text-6xl font-bold mb-4"></p>
+     <p class="text-sm text-gray-500 mb-2">Hãy viết chữ này:</p>
+     <p id="write-char" class="text-7xl font-bold mb-4 text-pink-700"></p>
      <canvas id="write-canvas" class="writing-canvas mx-auto" width="280" height="280"></canvas>
      <div class="flex justify-center gap-3 mt-4"><button class="btn-primary text-sm" onclick="clearCanvas()">🗑️ Xóa</button> <button class="btn-primary text-sm" onclick="nextWrite()">Tiếp →</button>
      </div>
     </div>
     <div class="flex justify-center mb-2">
-     <span id="write-counter" class="text-sm text-gray-500"></span>
+     <span id="write-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full"></span>
     </div>
-    <div id="write-complete" class="text-center mt-4 hidden"><button class="btn-primary" onclick="goToSection(10)">Tiếp → Kiểm tra cuối bài</button>
-    </div>
-   </div>
-  </section><!-- SECTION 10: Final Test -->
-  <section id="sec-10" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h2 data-template-id="sec10-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
-    <div class="card mb-4">
-     <p id="final-question" class="text-lg font-medium mb-4"></p>
-     <div id="final-options" class="space-y-3"></div>
-    </div>
-    <div class="flex justify-between items-center"><span id="final-counter" class="text-sm text-gray-500"></span> <button id="final-next" class="btn-primary text-sm hidden" onclick="nextFinal()">Tiếp →</button>
-    </div>
-   </div>
-  </section><!-- SECTION 11: Results -->
-  <section id="sec-11" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16 text-center">
-    <h2 data-template-id="results-title" class="canva-text text-2xl font-bold mb-6"></h2>
-    <div class="card mb-6">
-     <div id="results-emoji" class="text-6xl mb-4">
-      🎉
-     </div>
-     <p id="results-score" class="text-3xl font-bold mb-2"></p>
-     <p id="results-percent" class="text-lg text-gray-500 mb-4"></p>
-     <div id="results-level" class="text-lg font-semibold mb-4"></div>
-    </div>
-    <div id="results-wrong" class="card mb-6 text-left hidden">
-     <h3 class="font-bold mb-3">Những câu cần ôn lại:</h3>
-     <div id="wrong-list" class="space-y-2 text-sm"></div>
-    </div>
-    <div class="flex justify-center gap-3"><button class="btn-primary" onclick="goToMenu()">📋 Menu</button> <button class="btn-primary" onclick="restartApp()">🔄 Ôn tập lại</button>
-    </div>
-   </div>
-  </section><!-- SECTION 12: Menu -->
-  <section id="sec-12" class="section fade-in">
-   <div class="max-w-lg mx-auto p-4 pt-16">
-    <h1 data-template-id="menu-title" class="canva-text text-3xl font-bold text-center mb-8"></h1>
-    <div class="grid grid-cols-2 gap-3 mb-6"><button class="btn-primary py-4 text-lg text-left" onclick="goToSection(1)">📚 Phần 1<br><span class="text-sm">Ôn Từ Vựng</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(2)">🎯 Phần 2<br><span class="text-sm">Ghép Từ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(3)">✅ Phần 3<br><span class="text-sm">Chọn Đáp Án</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(4)">🔤 Phần 4<br><span class="text-sm">Sắp Xếp Từ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(5)">💪 Phần 5<br><span class="text-sm">Động Từ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(6)">🔄 Phần 6<br><span class="text-sm">Chính Phản</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(7)">💬 Phần 7<br><span class="text-sm">Hội Thoại</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(8)">🎧 Phần 8<br><span class="text-sm">Luyện Nghe</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(9)">✍️ Phần 9<br><span class="text-sm">Viết Chữ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(10)">📝 Phần 10<br><span class="text-sm">Kiểm Tra</span></button>
+    <div id="write-complete" class="text-center mt-4 hidden"><button class="btn-primary" onclick="goToSection(10)">✨ Tiếp → Kiểm tra cuối bài</button>
     </div>
    </div>
   </section>
+
+  <!-- SECTION 10: Final Test -->
+  <section id="sec-10" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">📝 Kiểm Tra Cuối Bài</h2>
+    <p class="text-center text-gray-500 mb-6">Tổng hợp kiến thức</p>
+    <div class="card mb-4">
+     <p id="final-question" class="text-lg font-medium mb-4 text-gray-700"></p>
+     <div id="final-options" class="space-y-3"></div>
+    </div>
+    <div class="flex justify-between items-center"><span id="final-counter" class="text-sm font-semibold text-pink-500 bg-pink-100 px-4 py-1 rounded-full"></span> <button id="final-next" class="btn-primary text-sm hidden" onclick="nextFinal()">Tiếp →</button>
+    </div>
+   </div>
+  </section>
+
+  <!-- SECTION 11: Results -->
+  <section id="sec-11" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-20 text-center">
+    <h2 class="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">🏆 Kết Quả</h2>
+    <div class="card mb-6">
+     <div id="results-emoji" class="text-7xl mb-4 float">🎉</div>
+     <p id="results-score" class="text-4xl font-bold text-pink-600 mb-2"></p>
+     <p id="results-percent" class="text-lg text-gray-500 mb-4"></p>
+     <div id="results-level" class="text-xl font-semibold mb-4"></div>
+    </div>
+    <div id="results-wrong" class="card mb-6 text-left hidden border-2 border-red-200">
+     <h3 class="font-bold mb-3 text-red-500">📌 Những câu cần ôn lại:</h3>
+     <div id="wrong-list" class="space-y-2 text-sm"></div>
+    </div>
+    <div class="flex flex-wrap justify-center gap-3"><button class="btn-primary" onclick="goToMenu()">📋 Menu</button> <button class="btn-primary" onclick="restartApp()">🔄 Ôn tập lại</button>
+    </div>
+   </div>
+  </section>
+
+  <!-- SECTION 12: Menu -->
+  <section id="sec-12" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-20">
+    <h1 class="text-4xl font-bold text-center mb-2 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent glow-text">📖 Menu</h1>
+    <p class="text-center text-gray-500 mb-8">Chọn phần bạn muôn ôn tập</p>
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(1)"><span class="text-xl">📚</span> Phần 1<br><span class="text-xs opacity-80">Từ Vựng</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(2)"><span class="text-xl">🎯</span> Phần 2<br><span class="text-xs opacity-80">Ghép Từ</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(3)"><span class="text-xl">✅</span> Phần 3<br><span class="text-xs opacity-80">Chọn Đáp Án</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(4)"><span class="text-xl">🔤</span> Phần 4<br><span class="text-xs opacity-80">Sắp Xếp</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(5)"><span class="text-xl">💪</span> Phần 5<br><span class="text-xs opacity-80">Động Từ</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(6)"><span class="text-xl">🔄</span> Phần 6<br><span class="text-xs opacity-80">Chính Phản</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(7)"><span class="text-xl">💬</span> Phần 7<br><span class="text-xs opacity-80">Hội Thoại</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(8)"><span class="text-xl">🎧</span> Phần 8<br><span class="text-xs opacity-80">Luyện Nghe</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(9)"><span class="text-xl">✍️</span> Phần 9<br><span class="text-xs opacity-80">Viết Chữ</span></button>
+      <button class="btn-primary py-4 text-lg text-left flex flex-col items-start" onclick="goToSection(10)"><span class="text-xl">📝</span> Phần 10<br><span class="text-xs opacity-80">Kiểm Tra</span></button>
+    </div>
+   </div>
+  </section>
+
   <script src="/_sdk/1b3fd03dc4388925.editing_sdk.js" integrity="sha512-HMKOzljDmMX17c/2qSxjmF+UiKp+R4otySq8hHaEvGRy/hvyWCt6bbZj/JXZ7SqUr0MevSDJLobqwuD/kiyBkg=="></script>
   <script src="/_sdk/48bf7c4c70d0d03c.data_sdk.js" integrity="sha512-e/yrQJz+prdXXt4yUvxXhl1WBGu3BRkP8X0fipGXI5gqiFClI7wI6K3TQnD7d63vx+BVhwzIvY6r8OrpX7lXJA=="></script>
   <script>
@@ -413,7 +468,7 @@ function speak(text) { const u = new SpeechSynthesisUtterance(text); u.lang = 'z
 
 // NAVIGATION
 const sectionIds = ['sec-0','sec-1','sec-2','sec-3','sec-4','sec-5','sec-6','sec-7','sec-8','sec-9','sec-10','sec-11','sec-12'];
-const sectionTitles = ['','Ôn Từ Vựng','Ghép Từ','Chọn Đáp Án','Sắp Xếp Từ','Động Từ','Câu Chính Phản','Hội Thoại','Luyện Nghe','Viết Chữ','Kiểm Tra','Kết Quả','Menu'];
+const sectionTitles = ['','📚 Từ Vựng','🎯 Ghép Từ','✅ Chọn Đáp Án','🔤 Sắp Xếp Từ','💪 Động Từ','🔄 Chính Phản','💬 Hội Thoại','🎧 Luyện Nghe','✍️ Viết Chữ','📝 Kiểm Tra','🏆 Kết Quả','📖 Menu'];
 
 function goToSection(n) {
     if (n < 0 || n >= sectionIds.length) return;
@@ -493,7 +548,7 @@ function selectMatch(el) {
         if (hanEl.dataset.idx === vnEl.dataset.original) {
             playCorrect(); hanEl.classList.add('matched'); vnEl.classList.add('matched');
             matchedCount++; matchScore++;
-            document.getElementById('matching-feedback').innerHTML = '✅ Chính xác!';
+            document.getElementById('matching-feedback').innerHTML = '✅ Chính xác! 🎉';
         } else { playWrong(); document.getElementById('matching-feedback').innerHTML = '❌ Thử lại nhé!'; }
         matchSelected.classList.remove('selected'); matchSelected = null;
         if (matchedCount === matchingPairs.length) { scores.matching = matchScore; document.getElementById('matching-feedback').innerHTML = `🎉 Hoàn thành! ${matchScore}/${matchingPairs.length}`; }
@@ -611,17 +666,17 @@ function renderDialogue() {
     let blankCount = 0;
     dialogueData.forEach((d, i) => {
         const div = document.createElement('div');
-        div.className = `p-3 rounded-xl ${d.speaker.includes('海伦') ? 'bg-pink-50 mr-8' : 'bg-blue-50 ml-8'}`;
+        div.className = `p-3 rounded-2xl ${d.speaker.includes('海伦') ? 'bg-pink-50 mr-8 border-l-4 border-pink-300' : 'bg-purple-50 ml-8 border-r-4 border-purple-300'}`;
         const sp = document.createElement('p'); sp.className = 'text-xs font-bold mb-1'; sp.textContent = d.speaker; div.appendChild(sp);
         const p = document.createElement('p'); p.className = 'font-medium';
         if (d.blank) {
             if (blankCount < dialogueStep) { p.textContent = d.text.replace('______', d.opts[d.ans]); }
             else if (blankCount === dialogueStep) {
                 p.textContent = d.text;
-                optsDiv.innerHTML = '<p class="text-sm text-gray-500 mb-2">Chọn từ phù hợp:</p>';
+                optsDiv.innerHTML = '<p class="text-sm text-gray-500 mb-2">👉 Chọn từ phù hợp:</p>';
                 d.opts.forEach((o, oi) => {
                     const btn = document.createElement('button'); btn.className = 'option-btn mb-2'; btn.textContent = o;
-                    btn.onclick = () => { if (oi === d.ans) playCorrect(); else playWrong(); dialogueStep++; checkDialogueComplete(); renderDialogue(); };
+                    btn.onclick = () => { if (oi === d.ans) { playCorrect(); } else { playWrong(); } dialogueStep++; checkDialogueComplete(); renderDialogue(); };
                     optsDiv.appendChild(btn);
                 });
             } else { p.textContent = d.text; }
@@ -660,7 +715,7 @@ function initCanvas() {
     showWriteChar();
     const canvas = document.getElementById('write-canvas');
     canvasCtx = canvas.getContext('2d');
-    canvasCtx.lineWidth = 4; canvasCtx.lineCap = 'round'; canvasCtx.strokeStyle = '#333';
+    canvasCtx.lineWidth = 5; canvasCtx.lineCap = 'round'; canvasCtx.strokeStyle = '#db2777';
     canvas.onpointerdown = e => { isDrawing = true; canvasCtx.beginPath(); canvasCtx.moveTo(e.offsetX, e.offsetY); };
     canvas.onpointermove = e => { if (!isDrawing) return; canvasCtx.lineTo(e.offsetX, e.offsetY); canvasCtx.stroke(); };
     canvas.onpointerup = () => isDrawing = false;
@@ -700,13 +755,13 @@ function showResults() {
     const pct = Math.round(total / possible * 100);
     document.getElementById('results-score').textContent = `${total}/${possible}`;
     document.getElementById('results-percent').textContent = `Tỷ lệ đúng: ${pct}%`;
-    if (pct >= 90) { document.getElementById('results-emoji').textContent = '🎉'; document.getElementById('results-level').innerHTML = '<span class="text-green-600">Xuất sắc!</span>'; }
-    else if (pct >= 70) { document.getElementById('results-emoji').textContent = '👍'; document.getElementById('results-level').innerHTML = '<span class="text-blue-600">Tốt!</span>'; }
-    else { document.getElementById('results-emoji').textContent = '📚'; document.getElementById('results-level').innerHTML = '<span class="text-orange-600">Cần ôn thêm</span>'; }
+    if (pct >= 90) { document.getElementById('results-emoji').textContent = '🎉'; document.getElementById('results-level').innerHTML = '<span class="text-pink-600">Xuất sắc! 🌟</span>'; }
+    else if (pct >= 70) { document.getElementById('results-emoji').textContent = '👍'; document.getElementById('results-level').innerHTML = '<span class="text-purple-600">Tốt lắm! 💪</span>'; }
+    else { document.getElementById('results-emoji').textContent = '📚'; document.getElementById('results-level').innerHTML = '<span class="text-orange-500">Cần ôn thêm nhé! 📖</span>'; }
     if (wrongAnswers.length > 0) {
         document.getElementById('results-wrong').classList.remove('hidden');
         const list = document.getElementById('wrong-list'); list.innerHTML = '';
-        wrongAnswers.forEach(w => { list.innerHTML += `<p>❌ ${w.q} → Bạn chọn: <b>${w.chosen}</b> | Đáp án: <b class="text-green-600">${w.correct}</b></p>`; });
+        wrongAnswers.forEach(w => { list.innerHTML += `<p class="bg-red-50 p-2 rounded-xl">❌ ${w.q} → Bạn chọn: <b class="text-red-500">${w.chosen}</b> | Đáp án: <b class="text-green-600">${w.correct}</b></p>`; });
     }
     saveResults(total, possible, pct);
 }
