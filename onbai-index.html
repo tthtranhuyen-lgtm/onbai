@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="vi">
+ <head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260629-05-f19f4d2"}');</script><script src="/_sdk/e4192b04afde3ce7.telemetry_sdk.js" integrity="sha512-4eZpyKBd3YJnsIPrIpaBqo7QT5UZ6+KSFXkSu1IQiB7jKM8y67ChRhZ5Yh6JfuOJCbPdISiNcS6nLKZzIMG1uQ=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn Tập Tiếng Trung</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <style>
+    * { font-family: 'DM Sans', sans-serif; }
+    :root { --accent: #4db6ac; --accent-dark: #00897b; }
+    .fade-in { animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .flip-card { perspective: 1000px; cursor: pointer; }
+    .flip-inner { transition: transform 0.6s; transform-style: preserve-3d; position: relative; width:100%; height:100%; }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; }
+    .flip-back { transform: rotateY(180deg); }
+    .section { display:none; }
+    .section.active { display:block; }
+    .progress-bar { transition: width 0.5s ease; }
+    .btn-primary { background: var(--accent); color:white; border-radius:12px; padding:12px 24px; font-weight:600; transition:all 0.2s; }
+    .btn-primary:hover { background: var(--accent-dark); transform:scale(1.02); }
+    .btn-primary:active { transform:scale(0.98); }
+    .card { background:white; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.06); padding:1.5rem; }
+    .option-btn { border:2px solid #e0e0e0; border-radius:12px; padding:12px 16px; transition:all 0.2s; cursor:pointer; text-align:left; width:100%; }
+    .option-btn:hover { border-color:var(--accent); background:#f0faf9; }
+    .option-btn.correct { border-color:#4caf50; background:#e8f5e9; }
+    .option-btn.wrong { border-color:#ef5350; background:#ffebee; }
+    .drag-item { background:#d0e8f2; border-radius:10px; padding:10px 16px; cursor:grab; user-select:none; transition:all 0.2s; font-weight:500; }
+    .drag-item:active { cursor:grabbing; transform:scale(1.05); }
+    .drag-item.selected { background:var(--accent); color:white; }
+    .drag-item.matched { background:#c8e6c9; opacity:0.7; pointer-events:none; }
+    .writing-canvas { border:2px solid #e0e0e0; border-radius:12px; touch-action:none; background: repeating-linear-gradient(0deg, transparent, transparent 49%, #eee 49%, #eee 51%, transparent 51%, transparent 100%), repeating-linear-gradient(90deg, transparent, transparent 49%, #eee 49%, #eee 51%, transparent 51%, transparent 100%); background-size: 50% 50%; }
+    .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); padding:12px 24px; border-radius:12px; font-weight:600; z-index:9999; animation:slideDown 0.3s ease; }
+    @keyframes slideDown { from{opacity:0;transform:translate(-50%,-20px)} to{opacity:1;transform:translate(-50%,0)} }
+  </style>
+  <script src="/_sdk/5d8c692e132d2125.resizing_sdk.js" type="text/javascript" integrity="sha512-/Du3Fqe12kKsCd3BrbaNQEPtMxQi9S5hbJhnTf09AAilpqYsGa4N0rnimSX1Ui4dwNElKlen6VlI+E1n/NEfrA=="></script>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen">
+  <div class="fixed top-0 left-0 w-full h-2 bg-gray-200 z-50">
+   <div id="global-progress" class="progress-bar h-full bg-gradient-to-r from-teal-400 to-green-400" style="width:0%"></div>
+  </div>
+  <div id="nav-bar" class="fixed top-2 left-0 w-full px-4 py-2 flex items-center justify-between bg-white bg-opacity-90 backdrop-blur-sm z-40 shadow-sm" style="display:none;"><button id="nav-back" class="btn-primary px-3 py-1 text-sm" onclick="goToMenu()">← Quay lại</button> <span id="nav-title" class="flex-1 text-center text-sm font-bold text-teal-700 mx-2"></span> <button class="btn-primary px-3 py-1 text-sm" onclick="goToMenu()">📋 Menu</button>
+  </div><!-- SECTION 0: Welcome -->
+  <section id="sec-0" class="section active fade-in">
+   <div class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+    <div class="mb-6">
+     <img data-template-id="hero-image" class="canva-image w-48 h-48 object-cover rounded-full shadow-lg mx-auto" loading="lazy">
+    </div>
+    <h1 data-template-id="welcome-title" class="canva-text text-3xl font-bold mb-2"></h1>
+    <p data-template-id="welcome-subtitle" class="canva-text text-lg mb-8 opacity-80"></p><button class="btn-primary text-lg flex items-center gap-2" onclick="startApp()"><span data-template-id="start-btn" class="canva-text"></span> ▶️</button>
+   </div>
+  </section><!-- SECTION 1: Flashcards -->
+  <section id="sec-1" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec1-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+    <div class="flex justify-center mb-4">
+     <span id="fc-counter" class="text-sm font-medium text-gray-500">1/19</span>
+    </div>
+    <div id="flashcard" class="flip-card mx-auto" style="width:300px;height:380px;" onclick="flipCard()">
+     <div class="flip-inner">
+      <div class="flip-front card bg-gradient-to-br from-blue-50 to-teal-50"><span id="fc-hanzi" class="text-6xl font-bold mb-4"></span><span class="text-sm text-gray-400">Nhấn để lật</span>
+      </div>
+      <div class="flip-back card bg-gradient-to-br from-yellow-50 to-green-50"><span id="fc-pinyin" class="text-xl text-teal-600 mb-2"></span><span id="fc-meaning" class="text-lg font-semibold mb-2"></span><span id="fc-example" class="text-sm text-gray-600 italic mb-4"></span><button class="btn-primary text-sm" onclick="event.stopPropagation();playPronunciation()">🔊 Nghe</button>
+      </div>
+     </div>
+    </div>
+    <div class="flex justify-between mt-6"><button class="btn-primary px-4 py-2 text-sm" onclick="prevCard()">← Trước</button> <button class="btn-primary px-4 py-2 text-sm" onclick="nextCard()">Tiếp →</button>
+    </div>
+    <div class="text-center mt-6">
+     <button class="btn-primary" onclick="goToSection(2)">Hoàn thành → Phần 2</button>
+    </div>
+   </div>
+  </section><!-- SECTION 2: Matching -->
+  <section id="sec-2" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec2-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+    <p data-template-id="sec2-desc" class="canva-text text-center text-gray-500 mb-6"></p>
+    <div id="matching-game" class="space-y-3"></div>
+    <div id="matching-feedback" class="text-center mt-4 font-bold text-lg"></div>
+    <div class="text-center mt-6">
+     <button class="btn-primary" onclick="goToSection(3)">Tiếp → Phần 3</button>
+    </div>
+   </div>
+  </section><!-- SECTION 3: MCQ -->
+  <section id="sec-3" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec3-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+    <div class="card mb-4">
+     <p id="mcq-question" class="text-lg font-medium mb-4"></p>
+     <div id="mcq-options" class="space-y-3"></div>
+     <p id="mcq-explain" class="mt-4 text-sm text-gray-600 hidden"></p>
+    </div>
+    <div class="flex justify-between items-center"><span id="mcq-counter" class="text-sm text-gray-500"></span> <button id="mcq-next" class="btn-primary text-sm hidden" onclick="nextMCQ()">Câu tiếp →</button>
+    </div>
+    <div id="mcq-complete" class="text-center mt-6 hidden">
+     <p class="text-lg font-bold mb-2">🎉 Hoàn thành!</p>
+     <p id="mcq-score" class="mb-4"></p><button class="btn-primary" onclick="goToSection(4)">Tiếp → Phần 4</button>
+    </div>
+   </div>
+  </section><!-- SECTION 4: Sentence Order -->
+  <section id="sec-4" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec4-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+    <div class="card mb-4">
+     <p class="text-sm text-gray-500 mb-2">Sắp xếp từ thành câu đúng:</p>
+     <div id="order-selected" class="min-h-[50px] flex flex-wrap gap-2 p-3 border-2 border-dashed border-gray-300 rounded-xl mb-4"></div>
+     <div id="order-words" class="flex flex-wrap gap-2"></div>
+     <div id="order-feedback" class="mt-4 font-bold"></div>
+    </div>
+    <div class="flex justify-between items-center"><span id="order-counter" class="text-sm text-gray-500"></span> <button id="order-check" class="btn-primary text-sm" onclick="checkOrder()">Kiểm tra</button> <button id="order-next" class="btn-primary text-sm hidden" onclick="nextOrder()">Tiếp →</button>
+    </div>
+    <div id="order-complete" class="text-center mt-6 hidden">
+     <p id="order-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(5)">Tiếp → Phần 5</button>
+    </div>
+   </div>
+  </section><!-- SECTION 5: Modal Verbs -->
+  <section id="sec-5" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec5-title" class="canva-text text-2xl font-bold text-center mb-4"></h2>
+    <div class="card mb-6 text-sm">
+     <div class="grid grid-cols-3 gap-2 text-center font-medium">
+      <div class="p-2 bg-blue-50 rounded-lg">
+       会<br><span class="text-xs text-gray-500">biết (kỹ năng)</span>
+      </div>
+      <div class="p-2 bg-green-50 rounded-lg">
+       能<br><span class="text-xs text-gray-500">có thể</span>
+      </div>
+      <div class="p-2 bg-yellow-50 rounded-lg">
+       可以<br><span class="text-xs text-gray-500">được phép</span>
+      </div>
+      <div class="p-2 bg-pink-50 rounded-lg">
+       应该<br><span class="text-xs text-gray-500">nên</span>
+      </div>
+      <div class="p-2 bg-purple-50 rounded-lg">
+       想<br><span class="text-xs text-gray-500">muốn</span>
+      </div>
+      <div class="p-2 bg-orange-50 rounded-lg">
+       要<br><span class="text-xs text-gray-500">cần/muốn</span>
+      </div>
+     </div>
+    </div>
+    <div class="card mb-4">
+     <p id="modal-question" class="text-lg font-medium mb-4"></p>
+     <div id="modal-options" class="space-y-3"></div>
+     <p id="modal-explain" class="mt-4 text-sm text-gray-600 hidden"></p>
+    </div>
+    <div class="flex justify-between items-center"><span id="modal-counter" class="text-sm text-gray-500"></span> <button id="modal-next" class="btn-primary text-sm hidden" onclick="nextModal()">Tiếp →</button>
+    </div>
+    <div id="modal-complete" class="text-center mt-6 hidden">
+     <p id="modal-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(6)">Tiếp → Phần 6</button>
+    </div>
+   </div>
+  </section><!-- SECTION 6: Affirmative-Negative -->
+  <section id="sec-6" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec6-title" class="canva-text text-2xl font-bold text-center mb-4"></h2>
+    <p data-template-id="sec6-desc" class="canva-text text-center text-gray-500 mb-6"></p>
+    <div class="card mb-4">
+     <p class="text-sm text-gray-500 mb-1">Chuyển thành câu chính phản:</p>
+     <p id="affirm-question" class="text-xl font-bold mb-4 text-center"></p><input id="affirm-input" type="text" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-400 focus:outline-none text-lg text-center" placeholder="Nhập câu chính phản...">
+     <div id="affirm-feedback" class="mt-4 font-bold text-center"></div>
+    </div>
+    <div class="flex justify-between items-center"><span id="affirm-counter" class="text-sm text-gray-500"></span> <button id="affirm-check" class="btn-primary text-sm" onclick="checkAffirm()">Kiểm tra</button> <button id="affirm-next" class="btn-primary text-sm hidden" onclick="nextAffirm()">Tiếp →</button>
+    </div>
+    <div id="affirm-complete" class="text-center mt-6 hidden">
+     <p id="affirm-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(7)">Tiếp → Phần 7</button>
+    </div>
+   </div>
+  </section><!-- SECTION 7: Dialogue -->
+  <section id="sec-7" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec7-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+    <div id="dialogue-area" class="space-y-3 mb-4"></div>
+    <div id="dialogue-options" class="card"></div>
+    <div id="dialogue-complete" class="text-center mt-6 hidden"><button class="btn-primary mr-2" onclick="playDialogue()">🔊 Nghe hội thoại</button> <button class="btn-primary" onclick="goToSection(8)">Tiếp → Phần 8</button>
+    </div>
+   </div>
+  </section><!-- SECTION 8: Listening -->
+  <section id="sec-8" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec8-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+    <div class="card mb-4">
+     <div class="text-center mb-4">
+      <button class="btn-primary text-lg" onclick="playListenAudio()">🔊 Nghe</button>
+     </div>
+     <p id="listen-question" class="text-lg font-medium mb-4"></p>
+     <div id="listen-options" class="space-y-3"></div>
+    </div>
+    <div class="flex justify-between items-center"><span id="listen-counter" class="text-sm text-gray-500"></span> <button id="listen-next" class="btn-primary text-sm hidden" onclick="nextListen()">Tiếp →</button>
+    </div>
+    <div id="listen-complete" class="text-center mt-6 hidden">
+     <p id="listen-score" class="text-lg font-bold mb-4"></p><button class="btn-primary" onclick="goToSection(9)">Tiếp → Phần 9</button>
+    </div>
+   </div>
+  </section><!-- SECTION 9: Writing -->
+  <section id="sec-9" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec9-title" class="canva-text text-2xl font-bold text-center mb-4"></h2>
+    <div class="card mb-4 text-center">
+     <p class="text-sm text-gray-500 mb-2">Viết chữ này:</p>
+     <p id="write-char" class="text-6xl font-bold mb-4"></p>
+     <canvas id="write-canvas" class="writing-canvas mx-auto" width="280" height="280"></canvas>
+     <div class="flex justify-center gap-3 mt-4"><button class="btn-primary text-sm" onclick="clearCanvas()">🗑️ Xóa</button> <button class="btn-primary text-sm" onclick="nextWrite()">Tiếp →</button>
+     </div>
+    </div>
+    <div class="flex justify-center mb-2">
+     <span id="write-counter" class="text-sm text-gray-500"></span>
+    </div>
+    <div id="write-complete" class="text-center mt-4 hidden"><button class="btn-primary" onclick="goToSection(10)">Tiếp → Kiểm tra cuối bài</button>
+    </div>
+   </div>
+  </section><!-- SECTION 10: Final Test -->
+  <section id="sec-10" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h2 data-template-id="sec10-title" class="canva-text text-2xl font-bold text-center mb-6"></h2>
+    <div class="card mb-4">
+     <p id="final-question" class="text-lg font-medium mb-4"></p>
+     <div id="final-options" class="space-y-3"></div>
+    </div>
+    <div class="flex justify-between items-center"><span id="final-counter" class="text-sm text-gray-500"></span> <button id="final-next" class="btn-primary text-sm hidden" onclick="nextFinal()">Tiếp →</button>
+    </div>
+   </div>
+  </section><!-- SECTION 11: Results -->
+  <section id="sec-11" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16 text-center">
+    <h2 data-template-id="results-title" class="canva-text text-2xl font-bold mb-6"></h2>
+    <div class="card mb-6">
+     <div id="results-emoji" class="text-6xl mb-4">
+      🎉
+     </div>
+     <p id="results-score" class="text-3xl font-bold mb-2"></p>
+     <p id="results-percent" class="text-lg text-gray-500 mb-4"></p>
+     <div id="results-level" class="text-lg font-semibold mb-4"></div>
+    </div>
+    <div id="results-wrong" class="card mb-6 text-left hidden">
+     <h3 class="font-bold mb-3">Những câu cần ôn lại:</h3>
+     <div id="wrong-list" class="space-y-2 text-sm"></div>
+    </div>
+    <div class="flex justify-center gap-3"><button class="btn-primary" onclick="goToMenu()">📋 Menu</button> <button class="btn-primary" onclick="restartApp()">🔄 Ôn tập lại</button>
+    </div>
+   </div>
+  </section><!-- SECTION 12: Menu -->
+  <section id="sec-12" class="section fade-in">
+   <div class="max-w-lg mx-auto p-4 pt-16">
+    <h1 data-template-id="menu-title" class="canva-text text-3xl font-bold text-center mb-8"></h1>
+    <div class="grid grid-cols-2 gap-3 mb-6"><button class="btn-primary py-4 text-lg text-left" onclick="goToSection(1)">📚 Phần 1<br><span class="text-sm">Ôn Từ Vựng</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(2)">🎯 Phần 2<br><span class="text-sm">Ghép Từ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(3)">✅ Phần 3<br><span class="text-sm">Chọn Đáp Án</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(4)">🔤 Phần 4<br><span class="text-sm">Sắp Xếp Từ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(5)">💪 Phần 5<br><span class="text-sm">Động Từ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(6)">🔄 Phần 6<br><span class="text-sm">Chính Phản</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(7)">💬 Phần 7<br><span class="text-sm">Hội Thoại</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(8)">🎧 Phần 8<br><span class="text-sm">Luyện Nghe</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(9)">✍️ Phần 9<br><span class="text-sm">Viết Chữ</span></button> <button class="btn-primary py-4 text-lg text-left" onclick="goToSection(10)">📝 Phần 10<br><span class="text-sm">Kiểm Tra</span></button>
+    </div>
+   </div>
+  </section>
+  <script src="/_sdk/222d5a595d1ea7ba.editing_sdk.js" integrity="sha512-+eUQhAMYoBwLPVWl3qwUfHhQeNM4ejU4XowINDMcqsaOwqt9uw0YaoGtGcOm1aWn4O0sfUcOk3TSof/bgT1OKQ=="></script>
+  <script src="/_sdk/48bf7c4c70d0d03c.data_sdk.js" integrity="sha512-e/yrQJz+prdXXt4yUvxXhl1WBGu3BRkP8X0fipGXI5gqiFClI7wI6K3TQnD7d63vx+BVhwzIvY6r8OrpX7lXJA=="></script>
+  <script>
+const vocabList = [
+    {hanzi:'刚',pinyin:'gāng',meaning:'vừa mới',example:'我刚来中国。'},
+    {hanzi:'介绍',pinyin:'jièshào',meaning:'giới thiệu',example:'我介绍一下。'},
+    {hanzi:'得',pinyin:'de/děi',meaning:'được/phải',example:'你得注册。'},
+    {hanzi:'卡',pinyin:'kǎ',meaning:'thẻ',example:'我有一张卡。'},
+    {hanzi:'需要',pinyin:'xūyào',meaning:'cần',example:'你需要注册。'},
+    {hanzi:'充值',pinyin:'chōngzhí',meaning:'nạp tiền',example:'我要给手机充值。'},
+    {hanzi:'上网',pinyin:'shàngwǎng',meaning:'lên mạng',example:'我想上网。'},
+    {hanzi:'种',pinyin:'zhǒng',meaning:'loại',example:'有两种输入法。'},
+    {hanzi:'能',pinyin:'néng',meaning:'có thể',example:'你能用微信吗？'},
+    {hanzi:'容易',pinyin:'róngyì',meaning:'dễ',example:'拼音输入法容易。'},
+    {hanzi:'服务',pinyin:'fúwù',meaning:'dịch vụ',example:'服务很好。'},
+    {hanzi:'担心',pinyin:'dānxīn',meaning:'lo lắng',example:'别担心。'},
+    {hanzi:'微信',pinyin:'wēixìn',meaning:'WeChat',example:'我用微信聊天。'},
+    {hanzi:'下',pinyin:'xià',meaning:'tải xuống',example:'你下一个微信吧。'},
+    {hanzi:'注册',pinyin:'zhùcè',meaning:'đăng ký',example:'你得注册一个账号。'},
+    {hanzi:'发',pinyin:'fā',meaning:'gửi',example:'我发一个消息。'},
+    {hanzi:'手写',pinyin:'shǒuxiě',meaning:'viết tay',example:'我用手写输入法。'},
+    {hanzi:'输入法',pinyin:'shūrùfǎ',meaning:'cách nhập liệu',example:'拼音输入法很容易。'},
+    {hanzi:'应该',pinyin:'yīnggāi',meaning:'nên',example:'你应该学拼音。'}
+];
+
+const matchingPairs = [
+    {han:'微信',vn:'WeChat'},{han:'注册',vn:'Đăng ký'},{han:'充值',vn:'Nạp tiền'},
+    {han:'输入法',vn:'Cách nhập liệu'},{han:'容易',vn:'Dễ'},{han:'上网',vn:'Lên mạng'},
+    {han:'担心',vn:'Lo lắng'},{han:'服务',vn:'Dịch vụ'}
+];
+
+const mcqBank = [
+    {q:'我想给手机______。',opts:['注册','充值','发'],ans:1,exp:'充值 = nạp tiền cho điện thoại'},
+    {q:'你______用微信吗？',opts:['会','是','有'],ans:0,exp:'会 = biết dùng (kỹ năng)'},
+    {q:'你得______一个账号。',opts:['注册','充值','下'],ans:0,exp:'注册 = đăng ký tài khoản'},
+    {q:'我用微信______消息。',opts:['下','发','写'],ans:1,exp:'发消息 = gửi tin nhắn'},
+    {q:'别______，很容易的。',opts:['担心','需要','介绍'],ans:0,exp:'别担心 = đừng lo'},
+    {q:'有两______输入法。',opts:['个','种','张'],ans:1,exp:'种 = loại'},
+    {q:'我______来中国。',opts:['刚','就','才'],ans:0,exp:'刚 = vừa mới'},
+    {q:'你______一个微信吧。',opts:['发','下','写'],ans:1,exp:'下 = tải xuống'},
+    {q:'我给你______一下微信。',opts:['介绍','注册','充值'],ans:0,exp:'介绍 = giới thiệu'},
+    {q:'你______手写输入法吗？',opts:['会','是','有'],ans:0,exp:'会 = biết sử dụng'},
+    {q:'我______上网。',opts:['想','是','得'],ans:0,exp:'想 = muốn'},
+    {q:'这个______很好。',opts:['服务','输入','注册'],ans:0,exp:'服务 = dịch vụ'},
+    {q:'你有______吗？',opts:['卡','刚','种'],ans:0,exp:'卡 = thẻ'},
+    {q:'你______学习拼音输入法。',opts:['应该','会','能'],ans:0,exp:'应该 = nên'}
+];
+
+const orderBank = [
+    {words:['你','用','微信','吗'],answer:'你用微信吗？'},
+    {words:['我','想','给','手机','充值'],answer:'我想给手机充值。'},
+    {words:['你','会','说','汉语','吗'],answer:'你会说汉语吗？'},
+    {words:['拼音','输入法','很','容易'],answer:'拼音输入法很容易。'},
+    {words:['我','刚','来','中国'],answer:'我刚来中国。'},
+    {words:['你','得','注册','一个','账号'],answer:'你得注册一个账号。'},
+    {words:['我','用','微信','发','消息'],answer:'我用微信发消息。'},
+    {words:['你','应该','学','拼音'],answer:'你应该学拼音。'},
+    {words:['别','担心','很','容易','的'],answer:'别担心很容易的。'},
+    {words:['有','两','种','输入法'],answer:'有两种输入法。'}
+];
+
+const modalBank = [
+    {q:'你______说汉语吗？(biết nói)',opts:['会','应该','可以'],ans:0,exp:'会 = biết (kỹ năng đã học)'},
+    {q:'这里不______游泳。(không được phép)',opts:['会','能','可以'],ans:2,exp:'不可以 = không được phép'},
+    {q:'你______多学习。(nên)',opts:['会','应该','能'],ans:1,exp:'应该 = nên'},
+    {q:'我今天不______去。(không thể)',opts:['会','能','应该'],ans:1,exp:'不能 = không thể'},
+    {q:'他______写汉字。(biết viết)',opts:['会','可以','应该'],ans:0,exp:'会 = biết (kỹ năng)'},
+    {q:'你______用我的手机。(được phép)',opts:['会','能','可以'],ans:2,exp:'可以 = được phép'},
+    {q:'我们______早点睡觉。(nên)',opts:['可以','应该','会'],ans:1,exp:'应该 = nên'},
+    {q:'她______唱中文歌。(biết hát)',opts:['会','应该','可以'],ans:0,exp:'会 = biết (kỹ năng)'},
+    {q:'我生病了，不______上课。(không thể)',opts:['会','能','应该'],ans:1,exp:'不能 = không thể'},
+    {q:'你______帮我吗？(có thể)',opts:['会','能','应该'],ans:1,exp:'能 = có thể'}
+];
+
+const affirmBank = [
+    {q:'你会说汉语吗？',answer:'你会不会说汉语？'},
+    {q:'他能来吗？',answer:'他能不能来？'},
+    {q:'我们可以进去吗？',answer:'我们可不可以进去？'},
+    {q:'你应该学习吗？',answer:'你应不应该学习？'},
+    {q:'她想去中国吗？',answer:'她想不想去中国？'},
+    {q:'你要喝水吗？',answer:'你要不要喝水？'},
+    {q:'你会用微信吗？',answer:'你会不会用微信？'},
+    {q:'他能游泳吗？',answer:'他能不能游泳？'},
+    {q:'我可以坐这里吗？',answer:'我可不可以坐这里？'},
+    {q:'你想吃饭吗？',answer:'你想不想吃饭？'}
+];
+
+const dialogueData = [
+    {speaker:'海伦 👩',text:'你用______吗？',blank:true,opts:['微信','手机','输入法'],ans:0},
+    {speaker:'欧文 👨',text:'用啊，微信很方便。',blank:false},
+    {speaker:'海伦 👩',text:'我______注册一个微信。',blank:true,opts:['想','会','能'],ans:0},
+    {speaker:'欧文 👨',text:'好，我帮你。你______用拼音输入法。',blank:true,opts:['应该','会','想'],ans:0},
+    {speaker:'海伦 👩',text:'拼音输入法______吗？',blank:true,opts:['容易','需要','担心'],ans:0},
+    {speaker:'欧文 👨',text:'很容易，别担心！',blank:false}
+];
+
+const listenBank = [
+    {text:'我觉得你应该学习拼音输入法。',q:'欧文建议海伦学习什么？',opts:['微信','拼音输入法','手机'],ans:1},
+    {text:'我刚来中国，需要注册微信。',q:'她需要做什么？',opts:['充值','上网','注册微信'],ans:2},
+    {text:'你用微信发消息吗？',q:'他问什么？',opts:['用不用微信发消息','会不会说汉语','想不想上网'],ans:0},
+    {text:'我想给手机充值。',q:'她想做什么？',opts:['注册','充值','下载'],ans:1},
+    {text:'拼音输入法很容易。',q:'拼音输入法怎么样？',opts:['很难','很贵','很容易'],ans:2},
+    {text:'别担心，我帮你注册。',q:'他说什么？',opts:['不帮忙','帮她注册','很担心'],ans:1},
+    {text:'有两种输入法：拼音和手写。',q:'有几种输入法？',opts:['一种','两种','三种'],ans:1},
+    {text:'你得注册一个账号。',q:'你得做什么？',opts:['充值','注册账号','下载微信'],ans:1},
+    {text:'我会用手写输入法。',q:'他会用什么？',opts:['拼音输入法','手写输入法','微信'],ans:1},
+    {text:'这个服务很好。',q:'服务怎么样？',opts:['不好','很好','很贵'],ans:1}
+];
+
+const writeChars = ['微','信','注','册','输','入','充','值'];
+
+const finalBank = [
+    {q:'微信是什么？',opts:['一种输入法','一个社交软件','一种手机'],ans:1},
+    {q:'充值是什么意思？',opts:['Nạp tiền','Đăng ký','Gửi'],ans:0},
+    {q:'你______说汉语吗？',opts:['会','是','有'],ans:0},
+    {q:'拼音输入法很______。',opts:['难','容易','贵'],ans:1},
+    {q:'我想给手机______。',opts:['注册','充值','发'],ans:1},
+    {q:'你得______一个账号。',opts:['注册','充值','下'],ans:0},
+    {q:'别______，很容易的。',opts:['担心','需要','介绍'],ans:0},
+    {q:'这里不______游泳。',opts:['会','能','可以'],ans:2},
+    {q:'你______多学习。',opts:['会','应该','能'],ans:1},
+    {q:'有两______输入法。',opts:['个','种','张'],ans:1},
+    {q:'我______来中国。',opts:['刚','就','才'],ans:0},
+    {q:'注册是什么意思？',opts:['Nạp tiền','Đăng ký','Gửi'],ans:1},
+    {q:'你会不会说汉语？ là dạng gì？',opts:['Câu hỏi chính phản','Câu trần thuật','Câu cảm thán'],ans:0},
+    {q:'应该 nghĩa là gì？',opts:['Biết','Nên','Có thể'],ans:1},
+    {q:'我用微信______消息。',opts:['下','发','写'],ans:1},
+    {q:'能 nghĩa là gì？',opts:['Biết (kỹ năng)','Có thể (khả năng)','Nên'],ans:1},
+    {q:'你______用我的手机。(được phép)',opts:['会','能','可以'],ans:2},
+    {q:'手写输入法là gì？',opts:['Nhập bằng giọng nói','Nhập bằng viết tay','Nhập bằng bàn phím'],ans:1},
+    {q:'她想不想去？ 的意思是：',opts:['Cô ấy có muốn đi không?','Cô ấy đi.','Cô ấy không đi.'],ans:0},
+    {q:'服务 nghĩa là gì？',opts:['Dịch vụ','Đăng ký','Lo lắng'],ans:0}
+];
+
+// STATE
+let currentSection = 0, scores = {}, fcIndex = 0;
+let matchSelected = null, matchScore = 0, matchedCount = 0;
+let mcqIndex = 0, mcqScore = 0, mcqAnswered = false;
+let orderIndex = 0, orderScore = 0, orderSelected = [];
+let modalIndex = 0, modalScore = 0, modalAnswered = false;
+let affirmIndex = 0, affirmScore = 0;
+let dialogueStep = 0;
+let listenIndex = 0, listenScore = 0, listenAnswered = false;
+let writeIndex = 0, isDrawing = false, canvasCtx = null;
+let finalIndex = 0, finalScore = 0, finalAnswered = false, wrongAnswers = [];
+
+// AUDIO
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(freq, dur, type='sine') {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+function playCorrect() { playSound(523,0.1); setTimeout(()=>playSound(659,0.1),100); setTimeout(()=>playSound(784,0.2),200); }
+function playWrong() { playSound(200,0.3,'sawtooth'); }
+function speak(text) { const u = new SpeechSynthesisUtterance(text); u.lang = 'zh-CN'; u.rate = 0.8; speechSynthesis.speak(u); }
+
+// NAVIGATION
+const sectionIds = ['sec-0','sec-1','sec-2','sec-3','sec-4','sec-5','sec-6','sec-7','sec-8','sec-9','sec-10','sec-11','sec-12'];
+const sectionTitles = ['','Ôn Từ Vựng','Ghép Từ','Chọn Đáp Án','Sắp Xếp Từ','Động Từ','Câu Chính Phản','Hội Thoại','Luyện Nghe','Viết Chữ','Kiểm Tra','Kết Quả','Menu'];
+
+function goToSection(n) {
+    if (n < 0 || n >= sectionIds.length) return;
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionIds[n]).classList.add('active');
+    currentSection = n;
+    const navBar = document.getElementById('nav-bar');
+    if (n === 0) { navBar.style.display = 'none'; }
+    else { navBar.style.display = 'flex'; document.getElementById('nav-title').textContent = sectionTitles[n]; }
+    updateProgress();
+    window.scrollTo(0, 0);
+    if (n === 2) initMatching();
+    if (n === 3) showMCQ();
+    if (n === 4) showOrder();
+    if (n === 5) showModal();
+    if (n === 6) showAffirm();
+    if (n === 7) initDialogue();
+    if (n === 8) showListen();
+    if (n === 9) initCanvas();
+    if (n === 10) showFinal();
+}
+
+function goToMenu() { goToSection(12); }
+function updateProgress() { const pct = Math.min(100, Math.round((currentSection / 10) * 100)); document.getElementById('global-progress').style.width = pct + '%'; }
+function startApp() { if (audioCtx.state === 'suspended') audioCtx.resume(); goToSection(12); }
+function restartApp() {
+    scores = {}; fcIndex = 0; mcqIndex = 0; mcqScore = 0; orderIndex = 0; orderScore = 0;
+    modalIndex = 0; modalScore = 0; affirmIndex = 0; affirmScore = 0; listenIndex = 0; listenScore = 0;
+    writeIndex = 0; finalIndex = 0; finalScore = 0; wrongAnswers = [];
+    matchedCount = 0; matchScore = 0; dialogueStep = 0;
+    goToSection(12);
+}
+
+// FLASHCARDS
+function showFlashcard() {
+    const v = vocabList[fcIndex];
+    document.getElementById('fc-hanzi').textContent = v.hanzi;
+    document.getElementById('fc-pinyin').textContent = v.pinyin;
+    document.getElementById('fc-meaning').textContent = v.meaning;
+    document.getElementById('fc-example').textContent = v.example;
+    document.getElementById('fc-counter').textContent = `${fcIndex+1}/${vocabList.length}`;
+    document.getElementById('flashcard').classList.remove('flipped');
+}
+function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); }
+function nextCard() { fcIndex = (fcIndex + 1) % vocabList.length; showFlashcard(); }
+function prevCard() { fcIndex = (fcIndex - 1 + vocabList.length) % vocabList.length; showFlashcard(); }
+function playPronunciation() { speak(vocabList[fcIndex].hanzi); }
+
+// MATCHING
+function initMatching() {
+    matchedCount = 0; matchScore = 0; matchSelected = null;
+    const container = document.getElementById('matching-game'); container.innerHTML = '';
+    const shuffledVn = [...matchingPairs].sort(() => Math.random() - 0.5);
+    const grid = document.createElement('div'); grid.className = 'grid grid-cols-2 gap-3';
+    matchingPairs.forEach((p, i) => {
+        const han = document.createElement('div'); han.className = 'drag-item text-center text-lg';
+        han.textContent = p.han; han.dataset.type = 'han'; han.dataset.idx = i;
+        han.onclick = () => selectMatch(han); grid.appendChild(han);
+    });
+    shuffledVn.forEach((p) => {
+        const vn = document.createElement('div'); vn.className = 'drag-item text-center text-sm';
+        vn.textContent = p.vn; vn.dataset.type = 'vn'; vn.dataset.original = matchingPairs.findIndex(x => x.vn === p.vn);
+        vn.onclick = () => selectMatch(vn); grid.appendChild(vn);
+    });
+    container.appendChild(grid);
+    document.getElementById('matching-feedback').textContent = '';
+}
+function selectMatch(el) {
+    if (el.classList.contains('matched')) return;
+    if (!matchSelected) { matchSelected = el; el.classList.add('selected'); }
+    else {
+        if (matchSelected === el) { el.classList.remove('selected'); matchSelected = null; return; }
+        const t1 = matchSelected.dataset.type, t2 = el.dataset.type;
+        if (t1 === t2) { matchSelected.classList.remove('selected'); matchSelected = el; el.classList.add('selected'); return; }
+        const hanEl = t1 === 'han' ? matchSelected : el;
+        const vnEl = t1 === 'vn' ? matchSelected : el;
+        if (hanEl.dataset.idx === vnEl.dataset.original) {
+            playCorrect(); hanEl.classList.add('matched'); vnEl.classList.add('matched');
+            matchedCount++; matchScore++;
+            document.getElementById('matching-feedback').innerHTML = '✅ Chính xác!';
+        } else { playWrong(); document.getElementById('matching-feedback').innerHTML = '❌ Thử lại nhé!'; }
+        matchSelected.classList.remove('selected'); matchSelected = null;
+        if (matchedCount === matchingPairs.length) { scores.matching = matchScore; document.getElementById('matching-feedback').innerHTML = `🎉 Hoàn thành! ${matchScore}/${matchingPairs.length}`; }
+    }
+}
+
+// MCQ
+function showMCQ() {
+    if (mcqIndex >= mcqBank.length) { document.getElementById('mcq-complete').classList.remove('hidden'); scores.mcq = mcqScore; document.getElementById('mcq-score').textContent = `Điểm: ${mcqScore}/${mcqBank.length}`; return; }
+    mcqAnswered = false; const q = mcqBank[mcqIndex];
+    document.getElementById('mcq-question').textContent = q.q;
+    document.getElementById('mcq-counter').textContent = `${mcqIndex+1}/${mcqBank.length}`;
+    document.getElementById('mcq-explain').classList.add('hidden');
+    document.getElementById('mcq-next').classList.add('hidden');
+    const opts = document.getElementById('mcq-options'); opts.innerHTML = '';
+    q.opts.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = o; btn.onclick = () => answerMCQ(i, btn); opts.appendChild(btn); });
+}
+function answerMCQ(i, btn) {
+    if (mcqAnswered) return; mcqAnswered = true; const q = mcqBank[mcqIndex];
+    if (i === q.ans) { btn.classList.add('correct'); playCorrect(); mcqScore++; }
+    else { btn.classList.add('wrong'); playWrong(); document.getElementById('mcq-options').children[q.ans].classList.add('correct'); }
+    document.getElementById('mcq-explain').textContent = q.exp; document.getElementById('mcq-explain').classList.remove('hidden');
+    document.getElementById('mcq-next').classList.remove('hidden');
+}
+function nextMCQ() { mcqIndex++; showMCQ(); }
+
+// ORDER
+function showOrder() {
+    if (orderIndex >= orderBank.length) { document.getElementById('order-complete').classList.remove('hidden'); scores.order = orderScore; document.getElementById('order-score').textContent = `Điểm: ${orderScore}/${orderBank.length}`; return; }
+    orderSelected = []; const q = orderBank[orderIndex];
+    document.getElementById('order-counter').textContent = `${orderIndex+1}/${orderBank.length}`;
+    document.getElementById('order-feedback').textContent = '';
+    document.getElementById('order-check').classList.remove('hidden');
+    document.getElementById('order-next').classList.add('hidden');
+    renderOrderWords(); document.getElementById('order-selected').innerHTML = '';
+}
+function renderOrderWords() {
+    const q = orderBank[orderIndex];
+    const wordsDiv = document.getElementById('order-words'); wordsDiv.innerHTML = '';
+    const shuffled = [...q.words].sort(() => Math.random() - 0.5);
+    shuffled.forEach(w => {
+        const used = orderSelected.filter(x => x === w).length;
+        const total = q.words.filter(x => x === w).length;
+        if (used >= total) return;
+        const btn = document.createElement('button'); btn.className = 'drag-item'; btn.textContent = w;
+        btn.onclick = () => { orderSelected.push(w); renderOrderSelected(); renderOrderWords(); };
+        wordsDiv.appendChild(btn);
+    });
+}
+function renderOrderSelected() {
+    const div = document.getElementById('order-selected'); div.innerHTML = '';
+    orderSelected.forEach((w, i) => {
+        const span = document.createElement('span'); span.className = 'drag-item text-sm'; span.textContent = w;
+        span.onclick = () => { orderSelected.splice(i, 1); renderOrderSelected(); renderOrderWords(); };
+        div.appendChild(span);
+    });
+}
+function checkOrder() {
+    const q = orderBank[orderIndex]; const userAns = orderSelected.join('');
+    const correct = q.answer.replace(/[？。！]/g, '');
+    if (userAns === correct) { playCorrect(); orderScore++; document.getElementById('order-feedback').innerHTML = '✔ Chính xác! → ' + q.answer; }
+    else { playWrong(); document.getElementById('order-feedback').innerHTML = '✘ Đáp án: ' + q.answer; }
+    document.getElementById('order-check').classList.add('hidden');
+    document.getElementById('order-next').classList.remove('hidden');
+}
+function nextOrder() { orderIndex++; showOrder(); }
+
+// MODAL VERBS
+function showModal() {
+    if (modalIndex >= modalBank.length) { document.getElementById('modal-complete').classList.remove('hidden'); scores.modal = modalScore; document.getElementById('modal-score').textContent = `Điểm: ${modalScore}/${modalBank.length}`; return; }
+    modalAnswered = false; const q = modalBank[modalIndex];
+    document.getElementById('modal-question').textContent = q.q;
+    document.getElementById('modal-counter').textContent = `${modalIndex+1}/${modalBank.length}`;
+    document.getElementById('modal-explain').classList.add('hidden');
+    document.getElementById('modal-next').classList.add('hidden');
+    const opts = document.getElementById('modal-options'); opts.innerHTML = '';
+    q.opts.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = o; btn.onclick = () => answerModal(i, btn); opts.appendChild(btn); });
+}
+function answerModal(i, btn) {
+    if (modalAnswered) return; modalAnswered = true; const q = modalBank[modalIndex];
+    if (i === q.ans) { btn.classList.add('correct'); playCorrect(); modalScore++; }
+    else { btn.classList.add('wrong'); playWrong(); document.getElementById('modal-options').children[q.ans].classList.add('correct'); }
+    document.getElementById('modal-explain').textContent = q.exp; document.getElementById('modal-explain').classList.remove('hidden');
+    document.getElementById('modal-next').classList.remove('hidden');
+}
+function nextModal() { modalIndex++; showModal(); }
+
+// AFFIRMATIVE-NEGATIVE
+function showAffirm() {
+    if (affirmIndex >= affirmBank.length) { document.getElementById('affirm-complete').classList.remove('hidden'); scores.affirm = affirmScore; document.getElementById('affirm-score').textContent = `Điểm: ${affirmScore}/${affirmBank.length}`; return; }
+    document.getElementById('affirm-question').textContent = affirmBank[affirmIndex].q;
+    document.getElementById('affirm-counter').textContent = `${affirmIndex+1}/${affirmBank.length}`;
+    document.getElementById('affirm-input').value = '';
+    document.getElementById('affirm-feedback').textContent = '';
+    document.getElementById('affirm-check').classList.remove('hidden');
+    document.getElementById('affirm-next').classList.add('hidden');
+}
+function checkAffirm() {
+    const user = document.getElementById('affirm-input').value.trim();
+    const ans = affirmBank[affirmIndex].answer;
+    if (user === ans || user === ans.replace('？', '?') || user + '？' === ans) { playCorrect(); affirmScore++; document.getElementById('affirm-feedback').innerHTML = '✔ Chính xác!'; }
+    else { playWrong(); document.getElementById('affirm-feedback').innerHTML = '✘ Đáp án: ' + ans; }
+    document.getElementById('affirm-check').classList.add('hidden');
+    document.getElementById('affirm-next').classList.remove('hidden');
+}
+function nextAffirm() { affirmIndex++; showAffirm(); }
+
+// DIALOGUE
+function initDialogue() {
+    dialogueStep = 0; document.getElementById('dialogue-complete').classList.add('hidden'); renderDialogue();
+}
+function renderDialogue() {
+    const area = document.getElementById('dialogue-area'); area.innerHTML = '';
+    const optsDiv = document.getElementById('dialogue-options'); optsDiv.innerHTML = '';
+    let blankCount = 0;
+    dialogueData.forEach((d, i) => {
+        const div = document.createElement('div');
+        div.className = `p-3 rounded-xl ${d.speaker.includes('海伦') ? 'bg-pink-50 mr-8' : 'bg-blue-50 ml-8'}`;
+        const sp = document.createElement('p'); sp.className = 'text-xs font-bold mb-1'; sp.textContent = d.speaker; div.appendChild(sp);
+        const p = document.createElement('p'); p.className = 'font-medium';
+        if (d.blank) {
+            if (blankCount < dialogueStep) { p.textContent = d.text.replace('______', d.opts[d.ans]); }
+            else if (blankCount === dialogueStep) {
+                p.textContent = d.text;
+                optsDiv.innerHTML = '<p class="text-sm text-gray-500 mb-2">Chọn từ phù hợp:</p>';
+                d.opts.forEach((o, oi) => {
+                    const btn = document.createElement('button'); btn.className = 'option-btn mb-2'; btn.textContent = o;
+                    btn.onclick = () => { if (oi === d.ans) playCorrect(); else playWrong(); dialogueStep++; checkDialogueComplete(); renderDialogue(); };
+                    optsDiv.appendChild(btn);
+                });
+            } else { p.textContent = d.text; }
+            blankCount++;
+        } else { p.textContent = d.text; }
+        div.appendChild(p); area.appendChild(div);
+    });
+}
+function checkDialogueComplete() {
+    const totalBlanks = dialogueData.filter(d => d.blank).length;
+    if (dialogueStep >= totalBlanks) { document.getElementById('dialogue-complete').classList.remove('hidden'); document.getElementById('dialogue-options').innerHTML = ''; }
+}
+function playDialogue() { dialogueData.forEach((d, i) => setTimeout(() => speak(d.text.replace('______', d.opts ? d.opts[d.ans] : '')), i * 2000)); }
+
+// LISTENING
+function showListen() {
+    if (listenIndex >= listenBank.length) { document.getElementById('listen-complete').classList.remove('hidden'); scores.listen = listenScore; document.getElementById('listen-score').textContent = `Điểm: ${listenScore}/${listenBank.length}`; return; }
+    listenAnswered = false; const q = listenBank[listenIndex];
+    document.getElementById('listen-question').textContent = q.q;
+    document.getElementById('listen-counter').textContent = `${listenIndex+1}/${listenBank.length}`;
+    document.getElementById('listen-next').classList.add('hidden');
+    const opts = document.getElementById('listen-options'); opts.innerHTML = '';
+    q.opts.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = o; btn.onclick = () => answerListen(i, btn); opts.appendChild(btn); });
+}
+function playListenAudio() { speak(listenBank[listenIndex].text); }
+function answerListen(i, btn) {
+    if (listenAnswered) return; listenAnswered = true; const q = listenBank[listenIndex];
+    if (i === q.ans) { btn.classList.add('correct'); playCorrect(); listenScore++; }
+    else { btn.classList.add('wrong'); playWrong(); document.getElementById('listen-options').children[q.ans].classList.add('correct'); }
+    document.getElementById('listen-next').classList.remove('hidden');
+}
+function nextListen() { listenIndex++; showListen(); }
+
+// WRITING
+function initCanvas() {
+    showWriteChar();
+    const canvas = document.getElementById('write-canvas');
+    canvasCtx = canvas.getContext('2d');
+    canvasCtx.lineWidth = 4; canvasCtx.lineCap = 'round'; canvasCtx.strokeStyle = '#333';
+    canvas.onpointerdown = e => { isDrawing = true; canvasCtx.beginPath(); canvasCtx.moveTo(e.offsetX, e.offsetY); };
+    canvas.onpointermove = e => { if (!isDrawing) return; canvasCtx.lineTo(e.offsetX, e.offsetY); canvasCtx.stroke(); };
+    canvas.onpointerup = () => isDrawing = false;
+    canvas.onpointerleave = () => isDrawing = false;
+}
+function showWriteChar() {
+    if (writeIndex >= writeChars.length) { document.getElementById('write-complete').classList.remove('hidden'); return; }
+    document.getElementById('write-char').textContent = writeChars[writeIndex];
+    document.getElementById('write-counter').textContent = `${writeIndex+1}/${writeChars.length}`;
+    clearCanvas();
+}
+function clearCanvas() { if (canvasCtx) canvasCtx.clearRect(0, 0, 280, 280); }
+function nextWrite() { writeIndex++; showWriteChar(); }
+
+// FINAL TEST
+function showFinal() {
+    if (finalIndex >= finalBank.length) { showResults(); return; }
+    finalAnswered = false; const q = finalBank[finalIndex];
+    document.getElementById('final-question').textContent = q.q;
+    document.getElementById('final-counter').textContent = `${finalIndex+1}/${finalBank.length}`;
+    document.getElementById('final-next').classList.add('hidden');
+    const opts = document.getElementById('final-options'); opts.innerHTML = '';
+    q.opts.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = o; btn.onclick = () => answerFinal(i, btn); opts.appendChild(btn); });
+}
+function answerFinal(i, btn) {
+    if (finalAnswered) return; finalAnswered = true; const q = finalBank[finalIndex];
+    if (i === q.ans) { btn.classList.add('correct'); playCorrect(); finalScore++; }
+    else { btn.classList.add('wrong'); playWrong(); document.getElementById('final-options').children[q.ans].classList.add('correct'); wrongAnswers.push({ q: q.q, correct: q.opts[q.ans], chosen: q.opts[i] }); }
+    document.getElementById('final-next').classList.remove('hidden');
+}
+function nextFinal() { finalIndex++; showFinal(); }
+
+// RESULTS
+function showResults() {
+    goToSection(11); scores.final = finalScore;
+    const total = finalScore, possible = finalBank.length;
+    const pct = Math.round(total / possible * 100);
+    document.getElementById('results-score').textContent = `${total}/${possible}`;
+    document.getElementById('results-percent').textContent = `Tỷ lệ đúng: ${pct}%`;
+    if (pct >= 90) { document.getElementById('results-emoji').textContent = '🎉'; document.getElementById('results-level').innerHTML = '<span class="text-green-600">Xuất sắc!</span>'; }
+    else if (pct >= 70) { document.getElementById('results-emoji').textContent = '👍'; document.getElementById('results-level').innerHTML = '<span class="text-blue-600">Tốt!</span>'; }
+    else { document.getElementById('results-emoji').textContent = '📚'; document.getElementById('results-level').innerHTML = '<span class="text-orange-600">Cần ôn thêm</span>'; }
+    if (wrongAnswers.length > 0) {
+        document.getElementById('results-wrong').classList.remove('hidden');
+        const list = document.getElementById('wrong-list'); list.innerHTML = '';
+        wrongAnswers.forEach(w => { list.innerHTML += `<p>❌ ${w.q} → Bạn chọn: <b>${w.chosen}</b> | Đáp án: <b class="text-green-600">${w.correct}</b></p>`; });
+    }
+    saveResults(total, possible, pct);
+}
+
+// DATA SDK
+let allRecords = [];
+async function initDataSDK() {
+    const r = await window.dataSdk.init({ onDataChanged(data) { allRecords = data; } });
+}
+async function saveResults(total, possible, pct) {
+    if (allRecords.length >= 999) return;
+    await window.dataSdk.create({ student_name: 'Học sinh', section_scores: JSON.stringify(scores), total_score: total, total_possible: possible, completed_at: new Date().toISOString(), progress_percent: pct });
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded', () => { lucide.createIcons(); showFlashcard(); initDataSDK(); });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a13478d9c1c18408',t:'MTc4MjczMTI5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
